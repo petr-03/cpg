@@ -1,5 +1,5 @@
 def cislo_text(c):
-    c = int(c)  # převedeme vstup na celé číslo
+    c = int(c)
     j = ["nula", "jedna", "dva", "tři", "čtyři", "pět", "šest", "sedm", "osm", "devět"]
     d = ["", "deset", "dvacet", "třicet", "čtyřicet", "padesát",
          "šedesát", "sedmdesát", "osmdesát", "devadesát"]
