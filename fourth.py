@@ -65,26 +65,56 @@ def je_tah_mozny(figurka, cilova_pozice, obsazene_pozice):
     
     :return: True, pokud je tah možný, jinak False.
     """
+    aktualni_pozice = figurka["pozice"]
+    typ = figurka["typ"]
+
+    radek, sloupec = cilova_pozice
+
+    
+    if not (1 <= radek <= 8 and 1 <= sloupec <= 8):
+        return False
+
+   
     if cilova_pozice in obsazene_pozice:
         return False
+
+   
+    if typ == "pěšec":
+        povoleny_pohyb = je_tah_mozny_pesec(cilova_pozice, aktualni_pozice, obsazene_pozice)
+    elif typ == "jezdec":
+        povoleny_pohyb = je_tah_mozny_jezdec(cilova_pozice, aktualni_pozice, obsazene_pozice)
+    elif typ == "věž":
+        povoleny_pohyb = je_tah_mozny_vez(cilova_pozice, aktualni_pozice, obsazene_pozice)
+    elif typ == "střelec":
+        povoleny_pohyb = je_tah_mozny_strelec(cilova_pozice, aktualni_pozice, obsazene_pozice)
+    elif typ == "dáma":
+        povoleny_pohyb = (
+            je_tah_mozny_vez(cilova_pozice, aktualni_pozice, obsazene_pozice)
+            or je_tah_mozny_strelec(cilova_pozice, aktualni_pozice, obsazene_pozice)
+        )
+    elif typ == "král":
+        povoleny_pohyb = abs(aktualni_pozice[0] - cilova_pozice[0]) <= 1 and \
+                          abs(aktualni_pozice[1] - cilova_pozice[1]) <= 1
+    else:
+        return False
+
+    if not povoleny_pohyb:
+        return False
+
     
-    aktualni_pozice = figurka["pozice"]
-    if figurka["typ"] == "pěšec":
-        return je_tah_mozny_pesec(cilova_pozice, aktualni_pozice, obsazene_pozice)
-    elif figurka["typ"] == "jezdec":
-        return je_tah_mozny_jezdec(cilova_pozice, aktualni_pozice, obsazene_pozice)
-    elif figurka["typ"] == "věž":
-        return je_tah_mozny_vez(cilova_pozice, aktualni_pozice, obsazene_pozice)
-    elif figurka["typ"] == "střelec":
-        return je_tah_mozny_strelec(cilova_pozice, aktualni_pozice, obsazene_pozice)
-    elif figurka["typ"] == "dáma":
-        if je_tah_mozny_vez(cilova_pozice, aktualni_pozice, obsazene_pozice) or je_tah_mozny_strelec(cilova_pozice, aktualni_pozice, obsazene_pozice):
-            return True
-    elif figurka["typ"] == "král":
-        if abs(aktualni_pozice[0] - cilova_pozice[0]) <= 1 and abs(aktualni_pozice[1] - cilova_pozice[1]) <= 1:
-            return True
-    # Implementace pravidel pohybu pro různé figury zde.
-    return False
+    if typ not in ("jezdec",):
+        if (typ == "střelec" and not je_tah_mozny_strelec(cilova_pozice, aktualni_pozice, obsazene_pozice)):
+            return False
+        if (typ == "věž" and not je_tah_mozny_vez(cilova_pozice, aktualni_pozice, obsazene_pozice)):
+            return False
+        if (typ == "dáma" and not (
+                je_tah_mozny_vez(cilova_pozice, aktualni_pozice, obsazene_pozice) or
+                je_tah_mozny_strelec(cilova_pozice, aktualni_pozice, obsazene_pozice)
+        )):
+            return False
+       
+
+    return True
 
 
 if __name__ == "__main__":
