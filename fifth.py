@@ -17,7 +17,6 @@ def read_header(file_name, header_length):
 def is_jpeg(file_name):
    
     header = read_header(file_name, len(jpeg_header))
-
     return header == jpeg_header
 
 
@@ -33,9 +32,7 @@ def is_png(file_name):
 
 
 def print_file_type(file_name):
-    """
-    Funkce vypíše typ souboru - tuto funkci není třeba upravovat
-    """
+ 
     if is_jpeg(file_name):
         print(f'Soubor {file_name} je typu jpeg')
     elif is_gif(file_name):
